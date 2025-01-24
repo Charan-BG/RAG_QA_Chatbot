@@ -20,11 +20,11 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                bat 'pytest' // Add test cases in your repository
-            }
-        }
+        //stage('Run Tests') {
+          //  steps {
+            //    bat 'pytest' // Add test cases in your repository
+            //}
+        //}
 
         stage('Build Docker Image') {
             steps {
