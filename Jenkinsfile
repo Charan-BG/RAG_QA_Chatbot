@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "troopsassemble3002/rag-conversational-qa-chatbot" // Update with your Docker Hub username
+        DOCKER_IMAGE = "troopsassemble3002/rag-conversational-qa-chatbot" // Docker Hub username and image name
         DOCKER_REGISTRY_CREDENTIALS = 'docker_hub_credentials' // Jenkins credential ID
         GITHUB_REPO = "https://github.com/Charan-BG/RAG_QA_Chatbot.git"
     }
@@ -22,16 +22,24 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                // Escape variable with %% for Windows Batch Script
-                bat 'docker build -t %%DOCKER_IMAGE%%:latest .'
+                // Pass the environment variable explicitly in the bat command
+                bat """
+                SETLOCAL ENABLEDELAYEDEXPANSION
+                docker build -t %DOCKER_IMAGE%:latest .
+                ENDLOCAL
+                """
             }
         }
 
         stage('Push to Docker Registry') {
             steps {
                 withDockerRegistry([credentialsId: "${DOCKER_REGISTRY_CREDENTIALS}", url: '']) {
-                    // Escape variable with %% for Windows Batch Script
-                    bat 'docker push %%DOCKER_IMAGE%%:latest'
+                    // Pass the environment variable explicitly in the bat command
+                    bat """
+                    SETLOCAL ENABLEDELAYEDEXPANSION
+                    docker push %DOCKER_IMAGE%:latest
+                    ENDLOCAL
+                    """
                 }
             }
         }
