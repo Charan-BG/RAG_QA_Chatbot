@@ -20,22 +20,18 @@ pipeline {
             }
         }
 
-        //stage('Run Tests') {
-          //  steps {
-            //    bat 'pytest' // Add test cases in your repository
-            //}
-        //}
-
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t ${DOCKER_IMAGE}:latest .'
+                // Escape variable with %% for Windows Batch Script
+                bat 'docker build -t %%DOCKER_IMAGE%%:latest .'
             }
         }
 
         stage('Push to Docker Registry') {
             steps {
                 withDockerRegistry([credentialsId: "${DOCKER_REGISTRY_CREDENTIALS}", url: '']) {
-                    bat 'docker push ${DOCKER_IMAGE}:latest'
+                    // Escape variable with %% for Windows Batch Script
+                    bat 'docker push %%DOCKER_IMAGE%%:latest'
                 }
             }
         }
