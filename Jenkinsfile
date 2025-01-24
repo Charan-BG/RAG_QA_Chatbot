@@ -16,26 +16,26 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip install -r requirements.txt'
+                bat 'pip install -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'pytest' // Add test cases in your repository
+                bat 'pytest' // Add test cases in your repository
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t ${DOCKER_IMAGE}:latest .'
+                bat 'docker build -t ${DOCKER_IMAGE}:latest .'
             }
         }
 
         stage('Push to Docker Registry') {
             steps {
                 withDockerRegistry([credentialsId: "${DOCKER_REGISTRY_CREDENTIALS}", url: '']) {
-                    sh 'docker push ${DOCKER_IMAGE}:latest'
+                    bat 'docker push ${DOCKER_IMAGE}:latest'
                 }
             }
         }
